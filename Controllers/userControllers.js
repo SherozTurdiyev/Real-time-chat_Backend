@@ -11,7 +11,7 @@ const regiterUser = async (req, res) => {
     try {
         const { name, email, password } = req.body;
         let isUserChecking = await userModel.find({ email })
-        if (isUserChecking) return res.status(400).json({ status: 400, message: "Bunday foydalanuvchi mavjud!" })
+        if (!isUserChecking) return res.status(400).json({ status: 400, message: "Bunday foydalanuvchi mavjud!" })
 
         if (!name || !email || !password) return res.status(400).json({ status: 400, message: "Hammasi majburiy!" });
         if (validator.isEmail(email)) return res.status(400).json({ status: 400, message: "Email xato kiritilgan!" })
@@ -66,12 +66,40 @@ const loginUser = async (req, res) => {
 const findUser = async (req, res) => {
     try {
         const userID = req.params.userID
+        const user = await userModel.findById(userID)
+        if (!user) return res.status(400).json({
+            status: 400,
+            data: {}
+        });
 
-        res.userID
+        res.status(200).json({
+            status: 200,
+            data: user
+        })
     } catch (err) {
         console.log(err);
     }
 }
 
 
-module.exports = { regiterUser, loginUser, findUser }
+const getAllUsers = async (req, res) => {
+    try {
+        const allUsers = await userModel.find()
+        if (!allUsers) return res.status(400).json({
+            status: 400,
+            data: []
+        });
+
+        res.status(200).json({
+            status: 200,
+            data: allUsers
+        })
+
+    } catch (error) {
+        console.log("error: ", error.message);
+        res.status(500).json({ status: 500, message: "Kutilmagan Xatolik!" })
+    }
+}
+
+
+module.exports = { regiterUser, loginUser, findUser, getAllUsers }

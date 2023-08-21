@@ -2,7 +2,10 @@ const express = require('express');
 const cors = require('cors');
 const mongoose = require('mongoose');
 const dotenv = require('dotenv');
-const userRoute = require('./Routes/userRoutes')
+const userRoute = require('./Routes/userRoutes');
+const chatRoutes = require('./Routes/chatRoutes');
+const messageRoute = require('./Routes/messageRoute');
+const contactRoute = require('./Routes/contactRoute')
 
 
 const app = express();
@@ -14,6 +17,9 @@ app.use(cors());
 // route middleWare
 
 app.use('/api/users', userRoute)
+app.use('/api/chat', chatRoutes)
+app.use('/api/messages', messageRoute)
+app.use('/api/contact', contactRoute)
 
 
 
